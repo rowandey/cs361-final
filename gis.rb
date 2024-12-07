@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+require 'json'
+
 
 class Track
   def initialize(segments, name=nil)
@@ -23,8 +25,8 @@ class Track
     json += '"type": "MultiLineString",' # MultiLineString is for tracks
     json +='"coordinates": ['
     # Loop through all the segment objects
-    @segments.each_with_index do |s, index|
-      if index > 0
+    @segments.each_with_index do |s, i|
+      if i > 0
         json += ","
       end
       json += '['
@@ -86,19 +88,20 @@ class Waypoint
       json += ",#{@ele}"
     end
     json += ']},'
-    if name != nil or type != nil
-      json += '"properties": {'
-      if name != nil
-        json += '"title": "' + @name + '"'
-      end
-      if type != nil  # if type is not nil
-        if name != nil
-          json += ','
-        end
-        json += '"icon": "' + @type + '"'  # type is the icon
-      end
-      json += '}'
+    json += '"properties": {'
+    
+    if name != nil
+      json += '"title": "' + @name + '"'
     end
+
+    if type != nil 
+      if name != nil
+        json += ','
+      end
+      json += '"icon": "' + @type + '"'  # type is the icon
+    end
+    json += '}'
+    
     json += "}"
     return json
   end

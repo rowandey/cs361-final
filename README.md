@@ -2,7 +2,7 @@
 Changed "j" to json
 Changed "tsj" to track_segment_json
 Changed several names in main()
-
+Made names more consistant
 
 ## GIS Tool
 
