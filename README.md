@@ -1,3 +1,7 @@
+## CHANGELOG 
+Changed "j" to json
+Changed "tsj" to tracksjson
+
 ## GIS Tool
 
 Geographic Information Systems program.

@@ -12,42 +12,44 @@ class Track
   end
 
   def get_track_json()
-    j = '{'
-    j += '"type": "Feature", '
+    json = '{'
+    json += '"type": "Feature", '
     if @name != nil
-      j+= '"properties": {'
-      j += '"title": "' + @name + '"'
-      j += '},'
+      json+= '"properties": {'
+      json += '"title": "' + @name + '"'
+      json += '},'
     end
-    j += '"geometry": {'
-    j += '"type": "MultiLineString",'
-    j +='"coordinates": ['
+    json += '"geometry": {'
+    json += '"type": "MultiLineString",'
+    json +='"coordinates": ['
     # Loop through all the segment objects
     @segments.each_with_index do |s, index|
       if index > 0
-        j += ","
+        json += ","
       end
-      j += '['
+      json += '['
       # Loop through all the coordinates in the segment
-      tsj = ''
+      tracksjson = ''
       s.coordinates.each do |c|
-        if tsj != ''
-          tsj += ','
+        if tracksjson != ''
+          tracksjson += ','
         end
         # Add the coordinate
-        tsj += '['
-        tsj += "#{c.lon},#{c.lat}"
+        tracksjson += '['
+        tracksjson += "#{c.lon}, #{c.lat}"
         if c.ele != nil
-          tsj += ",#{c.ele}"
+          tracksjson += ",#{c.ele}"
         end
-        tsj += ']'
+        tracksjson += ']'
       end
-      j+=tsj
-      j+=']'
+      json+=tracksjson
+      json+=']'
     end
-    j + ']}}'
+    json + ']}}'
   end
 end
+
+
 class TrackSegment
   attr_reader :coordinates
   def initialize(coordinates)
@@ -55,6 +57,7 @@ class TrackSegment
   end
 end
 
+# point can be put somewhere
 class Point
 
   attr_reader :lat, :lon, :ele
@@ -67,10 +70,7 @@ class Point
 end
 
 class Waypoint
-
-
-
-attr_reader :lat, :lon, :ele, :name, :type
+  attr_reader :lat, :lon, :ele, :name, :type
 
   def initialize(lon, lat, ele=nil, name=nil, type=nil)
     @lat = lat
@@ -81,37 +81,38 @@ attr_reader :lat, :lon, :ele, :name, :type
   end
 
   def get_waypoint_json(indent=0)
-    j = '{"type": "Feature",'
+    json = '{"type": "Feature",'
     # if name is not nil or type is not nil
-    j += '"geometry": {"type": "Point","coordinates": '
-    j += "[#{@lon},#{@lat}"
+    json += '"geometry": {"type": "Point","coordinates": '
+    json += "[#{@lon},#{@lat}"
     if ele != nil
-      j += ",#{@ele}"
+      json += ",#{@ele}"
     end
-    j += ']},'
+    json += ']},'
     if name != nil or type != nil
-      j += '"properties": {'
+      json += '"properties": {'
       if name != nil
-        j += '"title": "' + @name + '"'
+        json += '"title": "' + @name + '"'
       end
       if type != nil  # if type is not nil
         if name != nil
-          j += ','
+          json += ','
         end
-        j += '"icon": "' + @type + '"'  # type is the icon
+        json += '"icon": "' + @type + '"'  # type is the icon
       end
-      j += '}'
+      json += '}'
     end
-    j += "}"
-    return j
+    json += "}"
+    return json
   end
 end
 
 class World
-def initialize(name, things)
-  @name = name
-  @features = things
-end
+  def initialize(name, things)
+    @name = name
+    @features = things
+  end
+
   def add_feature(f)
     @features.append(t)
   end
@@ -149,6 +150,7 @@ def main()
     Point.new(-122, 45.5),
   ]
 
+  # inject point
   t = Track.new([ts1, ts2], "track 1")
   t2 = Track.new([ts3], "track 2")
 
@@ -160,4 +162,3 @@ end
 if File.identical?(__FILE__, $0)
   main()
 end
-
