@@ -1,8 +1,12 @@
 ## CHANGELOG 
+**Changes are roughly in order, bottom being the most recent**
 Changed "j" to json
 Changed "tsj" to track_segment_json
 Changed several names in main()
 Made names more consistant
+Improved get_track_json
+Changed "type" to be "icon" in Waypoint because why wasn't it before
+
 
 ## GIS Tool
 

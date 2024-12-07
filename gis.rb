@@ -9,7 +9,7 @@ class Track
     segments.each do |s|
       segment_objects.append(TrackSegment.new(s))
     end
-    # set segments to segment_objects
+
     @segments = segment_objects
   end
 
@@ -76,8 +76,8 @@ class Track
     end
 
     JSON.generate(feature)
-
   end
+
 end
 
 class TrackSegment
@@ -98,42 +98,70 @@ class Point
 end
 
 class Waypoint
-  attr_reader :lat, :lon, :ele, :name, :type
+  attr_reader :lat, :lon, :ele, :name, :icon
 
-  def initialize(lon, lat, ele=nil, name=nil, type=nil)
+  def initialize(lon, lat, ele=nil, name=nil, icon=nil)
     @lat = lat
     @lon = lon
     @ele = ele
     @name = name
-    @type = type
+    @icon = icon
   end
 
-  def get_waypoint_json(indent=0)
-    json = '{"type": "Feature",'
-    # if name is not nil or type is not nil
-    json += '"geometry": {"type": "Point","coordinates": '
-    json += "[#{@lon},#{@lat}"
-    if ele != nil
-      json += ",#{@ele}"
-    end
-    json += ']},'
-    json += '"properties": {'
+  # def get_waypoint_json(indent=0)
+  #   json = '{"type": "Feature",'
+  #   # if name is not nil or type is not nil
+  #   json += '"geometry": {"type": "Point","coordinates": '
+  #   json += "[#{@lon},#{@lat}"
+  #   if ele != nil
+  #     json += ",#{@ele}"
+  #   end
+  #   json += ']},'
+  #   json += '"properties": {'
     
-    if name != nil
-      json += '"title": "' + @name + '"'
+  #   if name != nil
+  #     json += '"title": "' + @name + '"'
+  #   end
+
+  #   if icon != nil 
+  #     if name != nil
+  #       json += ','
+  #     end
+  #     json += '"icon": "' + @icon + '"' 
+  #   end
+  #   json += '}'
+    
+  #   json += "}"
+  #   return json
+  # end
+
+  def get_waypoint_json(indent=0) 
+    feature = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: []
+      }
+    }
+
+    if @name != nil
+      feature[:properties][:title] = @name
     end
 
-    if type != nil 
-      if name != nil
-        json += ','
-      end
-      json += '"icon": "' + @type + '"'  # type is the icon
+    if @icon != nil
+      feature[:properties][:icon] = @icon
     end
-    json += '}'
-    
-    json += "}"
-    return json
+
+    feature[:geometry][:coordinates] = [@lon, @lat]
+
+    if @ele != nil
+      feature[:geometry][:coordinates] << @ele
+    end
+
+    JSON.generate(feature)
   end
+
 end
 
 class World
@@ -148,7 +176,6 @@ class World
   end
 
   def to_geojson(indent=0)
-    # Write stuff
     json = '{"type": "FeatureCollection","features": ['
     @features.each_with_index do |f, i|
       if i != 0
