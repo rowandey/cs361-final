@@ -56,9 +56,7 @@ class TrackSegment
   end
 end
 
-# point can be put somewhere
 class Point
-
   attr_reader :lat, :lon, :ele
 
   def initialize(lon, lat, ele=nil)
@@ -107,29 +105,30 @@ class Waypoint
 end
 
 class World
-  def initialize(name, things)
+  def initialize(name, features)
     @name = name
-    @features = things
+    @features = features
   end
 
-  def add_feature(f)
-    @features.append(t)
+  # feels weird
+  def add_feature(feature)
+    @features.append(track)
   end
 
   def to_geojson(indent=0)
     # Write stuff
-    s = '{"type": "FeatureCollection","features": ['
-    @features.each_with_index do |f,i|
+    json = '{"type": "FeatureCollection","features": ['
+    @features.each_with_index do |f, i|
       if i != 0
-        s +=","
+        json += ","
       end
         if f.class == Track
-            s += f.get_track_json
+          json += f.get_track_json
         elsif f.class == Waypoint
-            s += f.get_waypoint_json
+          json += f.get_waypoint_json
       end
     end
-    s + "]}"
+    return json + "]}"
   end
 end
 
@@ -149,7 +148,6 @@ def main()
     Point.new(-122, 45.5),
   ]
 
-  # inject point
   track = Track.new([track_segment_1, track_segment_2], "track 1")
   track2 = Track.new([track_segment_3], "track 2")
 
