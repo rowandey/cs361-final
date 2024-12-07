@@ -13,41 +13,70 @@ class Track
     @segments = segment_objects
   end
 
+  # def get_track_json()
+  #   json = '{'
+  #   json += '"type": "Feature", '
+  #   if @name != nil
+  #     json+= '"properties": {'
+  #     json += '"title": "' + @name + '"'
+  #     json += '},'
+  #   end
+  #   json += '"geometry": {'
+  #   json += '"type": "MultiLineString",' # MultiLineString is for tracks
+  #   json +='"coordinates": ['
+  #   # Loop through all the segment objects
+  #   @segments.each_with_index do |s, i|
+  #     if i > 0
+  #       json += ","
+  #     end
+  #     json += '['
+  #     # Loop through all the coordinates in the segment
+  #     track_segment_json = ''
+  #     s.coordinates.each do |c|
+  #       if track_segment_json != ''
+  #         track_segment_json += ','
+  #       end
+  #       # Add the coordinate
+  #       track_segment_json += '['
+  #       track_segment_json += "#{c.lon}, #{c.lat}"
+  #       if c.ele != nil
+  #         track_segment_json += ",#{c.ele}"
+  #       end
+  #       track_segment_json += ']'
+  #     end
+  #     json+=track_segment_json
+  #     json+=']'
+  #   end
+  #   json + ']}}'
+  # end
+
   def get_track_json()
-    json = '{'
-    json += '"type": "Feature", '
+    feature = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "MultiLineString",
+        coordinates: []
+      }
+    }
+
     if @name != nil
-      json+= '"properties": {'
-      json += '"title": "' + @name + '"'
-      json += '},'
+      feature[:properties][:title] = @name
     end
-    json += '"geometry": {'
-    json += '"type": "MultiLineString",' # MultiLineString is for tracks
-    json +='"coordinates": ['
-    # Loop through all the segment objects
-    @segments.each_with_index do |s, i|
-      if i > 0
-        json += ","
-      end
-      json += '['
-      # Loop through all the coordinates in the segment
-      track_segment_json = ''
-      s.coordinates.each do |c|
-        if track_segment_json != ''
-          track_segment_json += ','
-        end
-        # Add the coordinate
-        track_segment_json += '['
-        track_segment_json += "#{c.lon}, #{c.lat}"
+
+    feature[:geometry][:coordinates] = @segments.map do |s|
+      s.coordinates.map do |c|
+        coords = [c.lon, c.lat]
         if c.ele != nil
-          track_segment_json += ",#{c.ele}"
+          coords << c.ele
         end
-        track_segment_json += ']'
+        coords
+
       end
-      json+=track_segment_json
-      json+=']'
     end
-    json + ']}}'
+
+    JSON.generate(feature)
+
   end
 end
 
