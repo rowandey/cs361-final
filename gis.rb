@@ -20,7 +20,7 @@ class Track
       json += '},'
     end
     json += '"geometry": {'
-    json += '"type": "MultiLineString",'
+    json += '"type": "MultiLineString",' # MultiLineString is for tracks
     json +='"coordinates": ['
     # Loop through all the segment objects
     @segments.each_with_index do |s, index|
@@ -29,26 +29,25 @@ class Track
       end
       json += '['
       # Loop through all the coordinates in the segment
-      tracksjson = ''
+      track_segment_json = ''
       s.coordinates.each do |c|
-        if tracksjson != ''
-          tracksjson += ','
+        if track_segment_json != ''
+          track_segment_json += ','
         end
         # Add the coordinate
-        tracksjson += '['
-        tracksjson += "#{c.lon}, #{c.lat}"
+        track_segment_json += '['
+        track_segment_json += "#{c.lon}, #{c.lat}"
         if c.ele != nil
-          tracksjson += ",#{c.ele}"
+          track_segment_json += ",#{c.ele}"
         end
-        tracksjson += ']'
+        track_segment_json += ']'
       end
-      json+=tracksjson
+      json+=track_segment_json
       json+=']'
     end
     json + ']}}'
   end
 end
-
 
 class TrackSegment
   attr_reader :coordinates
@@ -135,26 +134,26 @@ class World
 end
 
 def main()
-  w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
-  w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
-  ts1 = [
+  waypoint = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
+  waypoint2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
+  track_segment_1 = [
   Point.new(-122, 45),
   Point.new(-122, 46),
   Point.new(-121, 46),
   ]
 
-  ts2 = [ Point.new(-121, 45), Point.new(-121, 46), ]
+  track_segment_2 = [ Point.new(-121, 45), Point.new(-121, 46), ]
 
-  ts3 = [
+  track_segment_3 = [
     Point.new(-121, 45.5),
     Point.new(-122, 45.5),
   ]
 
   # inject point
-  t = Track.new([ts1, ts2], "track 1")
-  t2 = Track.new([ts3], "track 2")
+  track = Track.new([track_segment_1, track_segment_2], "track 1")
+  track2 = Track.new([track_segment_3], "track 2")
 
-  world = World.new("My Data", [w, w2, t, t2])
+  world = World.new("My Data", [waypoint, waypoint2, track, track2])
 
   puts world.to_geojson()
 end

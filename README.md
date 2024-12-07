@@ -1,6 +1,8 @@
 ## CHANGELOG 
 Changed "j" to json
-Changed "tsj" to tracksjson
+Changed "tsj" to track_segment_json
+Changed several names in main()
+
 
 ## GIS Tool
 
