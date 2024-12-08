@@ -82,6 +82,36 @@ class Waypoint
 
 end
 
+class World
+  def initialize(name, features)
+    @name = name
+    @features = features
+  end
+
+  # feels weird - commented out, think about later!
+  # def add_feature(feature)
+  #   @features.append(track)
+  # end
+
+  def to_worldjson()
+    worldjson = {
+      type:"FeatureCollection",
+      features: []
+    }
+
+    @features.each do |f|
+      if f.class == Track
+        worldjson[:features] << JSON.parse(f.get_track_json)
+      elsif f.class == Waypoint
+        worldjson[:features] << JSON.parse(f.get_waypoint_json)
+      end
+    end
+
+    JSON.generate(worldjson)
+  end
+
+end
+
 class TrackSegment
   attr_reader :coordinates
   def initialize(coordinates)
@@ -99,49 +129,6 @@ class Point
   end
 end
 
-class World
-  def initialize(name, features)
-    @name = name
-    @features = features
-  end
-
-  # feels weird - commented out, think about later!
-  # def add_feature(feature)
-  #   @features.append(track)
-  # end
-
-  # def to_geojson()
-  #   json = '{"type": "FeatureCollection","features": ['
-  #   @features.each_with_index do |f, i|
-  #     if i != 0
-  #       json += ","
-  #     end
-  #       if f.class == Track
-  #         json += f.get_track_json
-  #       elsif f.class == Waypoint
-  #         json += f.get_waypoint_json
-  #     end
-  #   end
-  #   return json + "]}"
-  # end
-
-  def to_geojson()
-    geojson = {
-      type:"FeatureCollection",
-      features: []
-    }
-
-    @features.each do |f|
-      if f.class == Track
-        geojson[:features] << JSON.parse(f.get_track_json)
-      elsif f.class == Waypoint
-        geojson[:features] << JSON.parse(f.get_waypoint_json)
-      end
-    end
-
-    JSON.generate(geojson)
-  end
-end
 
 def main()
   # waypoints
@@ -169,7 +156,7 @@ def main()
   # world gen
   world = World.new("My Data", [waypoint, waypoint2, track, track2])
 
-  puts world.to_geojson()
+  puts world.to_worldjson()
 end
 
 if File.identical?(__FILE__, $0)
