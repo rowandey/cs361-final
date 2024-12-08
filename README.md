@@ -12,14 +12,17 @@ Improved to_geojson
 Removed old to_geojson
 Renamed to_geojson to to_worldjson in order to match class name
 Removed add_feature
+Renamed TrackSegments to Coordinates
+Changed names in Track initalize while condensing it
 
 ## NOTES 
-Feature is a bad name to me and I'm unsure as to what it actually is meant to be,
-but its mentioned multiple times in the readme so I'm leaving it alone
+Feature is a bad name but I don't know what exactly its meant to be
+so I'm leaving it as is to not make it worse
 
 I considered merging elements of get_waypoint_json and get_track_json into a new class
-but the end result I got was not much better than what currently exists. 
-The only real benefit of the merge was getting rid of DRY code.
+but the end result I got was more a side-grade rather than an improvement.
+The only real benefit of the merge was getting rid of a little DRY code 
+while sacrificing readability in a major way.
 
 
 

@@ -2,15 +2,10 @@
 require 'json'
 
 class Track
-  def initialize(segments, name=nil)
-    @name = name
-    segment_objects = []
-    segments.each do |s|
-      segment_objects.append(TrackSegment.new(s))
-    end
-
-    @segments = segment_objects
-  end
+  def initialize(track_coordinates, name=nil)
+  @name = name
+  @track_coordinates = track_coordinates.map { |c| Coordinates.new(c) }
+end
 
   def get_track_json()
     feature = {
@@ -26,8 +21,8 @@ class Track
       feature[:properties][:title] = @name
     end
 
-    feature[:geometry][:coordinates] = @segments.map do |s|
-      s.coordinates.map do |c|
+    feature[:geometry][:coordinates] = @track_coordinates.map do |track_c|
+      track_c.coordinates.map do |c|
         coords = [c.lon, c.lat]
         if c.ele != nil
           coords << c.ele
@@ -107,7 +102,7 @@ class World
 
 end
 
-class TrackSegment
+class Coordinates
   attr_reader :coordinates
   def initialize(coordinates)
     @coordinates = coordinates
@@ -137,7 +132,7 @@ def main()
   Point.new(-121, 46),
   ]
 
-  track_segment_2 = [ Point.new(-121, 45), Point.new(-121, 46), ]
+  track_segment_2 = [Point.new(-121, 45), Point.new(-121, 46), ]
 
   track_segment_3 = [
     Point.new(-121, 45.5),
