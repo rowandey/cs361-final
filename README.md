@@ -8,7 +8,10 @@ Improved get_track_json
 Changed "type" to be "icon" in Waypoint
 Improved get_waypoint_json
 Removed old get_track_json and get_waypoint_json
-Improved to_geojosn
+Improved to_geojson
+Removed old to_geojson
+Renamed to_geojson to to_worldjson in order to match class name
+Removed add_feature
 
 ## NOTES 
 Feature is a bad name to me and I'm unsure as to what it actually is meant to be,

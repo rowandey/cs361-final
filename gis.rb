@@ -88,11 +88,6 @@ class World
     @features = features
   end
 
-  # feels weird - commented out, think about later!
-  # def add_feature(feature)
-  #   @features.append(track)
-  # end
-
   def to_worldjson()
     worldjson = {
       type:"FeatureCollection",
