@@ -5,7 +5,18 @@ Changed "tsj" to track_segment_json
 Changed several names in main()
 Made names more consistant
 Improved get_track_json
-Changed "type" to be "icon" in Waypoint because why wasn't it before
+Changed "type" to be "icon" in Waypoint
+Improved get_waypoint_json
+Removed old get_track_json and get_waypoint_json
+
+## NOTES 
+Feature is a bad name to me and I'm unsure as to what it actually is meant to be,
+but its mentioned multiple times in the readme so I'm leaving it alone
+
+I considered merging elements of get_waypoint_json and get_track_json into a new class
+but the end result I got was not much better than what currently exists. 
+The only real benefit of the merge was getting rid of DRY code.
+
 
 
 ## GIS Tool
