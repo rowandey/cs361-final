@@ -1,20 +1,35 @@
 ## CHANGELOG 
 **Changes are roughly in order, bottom being the most recent**
 Changed "j" to json
+
 Changed "tsj" to track_segment_json
+
 Changed several names in main()
+
 Made names more consistant
+
 Improved get_track_json
+
 Changed "type" to be "icon" in Waypoint
+
 Improved get_waypoint_json
+
 Removed old get_track_json and get_waypoint_json
+
 Improved to_geojson
+
 Removed old to_geojson
+
 Renamed to_geojson to to_worldjson in order to match class name
+
 Removed add_feature
+
 Renamed TrackSegments to Coordinates
+
 Changed names in Track initalize while condensing it
+
 Added some comments
+
 
 ## NOTES 
 Feature is a bad name but I don't know what exactly its meant to be
