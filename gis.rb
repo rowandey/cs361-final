@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 require 'json'
 
+# Track
+# Takes in a list of coordinates and an optional name
 class Track
   def initialize(track_coordinates, name=nil)
-  @name = name
-  @track_coordinates = track_coordinates.map { |c| Coordinates.new(c) }
-end
+    @name = name
+    @track_coordinates = track_coordinates.map { |c| Coordinates.new(c) }
+  end
 
+  # creates JSON for Track
   def get_track_json()
     feature = {
       type: "Feature",
@@ -21,6 +24,7 @@ end
       feature[:properties][:title] = @name
     end
 
+    # adds each track coordinate pair (lat, lon) to the JSON along with elevation if provided
     feature[:geometry][:coordinates] = @track_coordinates.map do |track_c|
       track_c.coordinates.map do |c|
         coords = [c.lon, c.lat]
@@ -37,6 +41,8 @@ end
 
 end
 
+# Waypoint
+# Takes in latitude, longitude, and as optional paramaters: elevation, name, and icon
 class Waypoint
   attr_reader :lat, :lon, :ele, :name, :icon
 
@@ -48,6 +54,7 @@ class Waypoint
     @icon = icon
   end
 
+  # creates JSON for Waypoint
   def get_waypoint_json() 
     feature = {
       type: "Feature",
@@ -77,18 +84,22 @@ class Waypoint
 
 end
 
+# World
+# takes in name and features of that world
 class World
   def initialize(name, features)
     @name = name
     @features = features
   end
 
+  # creates the world
   def to_worldjson()
     worldjson = {
       type:"FeatureCollection",
       features: []
     }
 
+    # goes through each world feature and determines what it is
     @features.each do |f|
       if f.class == Track
         worldjson[:features] << JSON.parse(f.get_track_json)
