@@ -41,6 +41,9 @@ The only real benefit of the merge was getting rid of a little DRY code
 while sacrificing readability in a major way. 
 Could be (and probably is) a better way to do it than what I tried.
 
+I personally like the names lat, lon, elevation so I'm leaving them, 
+but I do understand changing them.
+
 
 
 ## GIS Tool
